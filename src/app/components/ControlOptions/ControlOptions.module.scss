@@ -1,0 +1,85 @@
+.heading {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 700;
+  padding: 1.25rem 0 1rem;
+  margin: 0;
+  line-height: 1.2;
+  color: rgb(250, 250, 250);
+}
+
+.controlOptionsFrame {
+  width: 271px;
+  position: relative;
+}
+
+.controlOptions {
+  width: 271px;
+  position: relative;
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+}
+
+.controlOptionRow {
+  width: 271px;
+  position: relative;
+}
+
+.panelLabel {
+  font-size: 14px;
+  color: rgb(250, 250, 250);
+  display: flex;
+  margin-bottom: 0.25rem;
+  min-height: 1.5rem;
+  align-items: center;
+}
+
+.panelLabel p {
+  margin-bottom: 0px;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.uploadResumes {
+  background-color: rgb(14, 17, 23);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: rgb(250, 250, 250);
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.uploadLimit small {
+  color: rgba(250, 250, 250, 0.6);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.btnUpload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  min-height: 38.4px;
+  margin: 0px;
+  line-height: 1.6;
+  background-color: rgb(43, 44, 54);
+  border: 1px solid rgba(250, 250, 250, 0.2);
+  cursor: pointer;
+  color: inherit;
+}
+
+.btnUpload:hover {
+  border-color: rgb(255, 75, 75);
+  color: rgb(255, 75, 75);
+}
+
+.uploadText {
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,114 @@
+// CandidateTable.module.scss
+.container {
+  font-family: "Segoe UI", sans-serif;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #1a1d28;
+  border-radius: 8px;
+  color: #d1d5dc;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #2d2f34;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #ececf1;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+.select {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #2d2f34;
+  background: #343541;
+  color: #ececf1;
+  cursor: pointer;
+}
+
+.tableContainer {
+  margin-bottom: 2rem;
+
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: #ececf1;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #202123;
+  border-radius: 6px;
+  overflow: hidden;
+
+  th,
+  td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #2d2f34;
+  }
+
+  th {
+    background: #2d2f34;
+    font-weight: 600;
+  }
+
+  tr:hover {
+    background: #343541;
+  }
+}
+
+.removeSection {
+  border-top: 1px solid #2d2f34;
+  padding-top: 2rem;
+
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: #ececf1;
+  }
+}
+
+.removeControls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  select {
+    flex: 1;
+    max-width: 400px;
+  }
+}
+
+.removeButton {
+  padding: 0.75rem 1.5rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #bb2d3b;
+  }
+}

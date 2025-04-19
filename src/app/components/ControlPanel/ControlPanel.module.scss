@@ -1,0 +1,81 @@
+// ControlPanel.module.scss
+.controlPanel {
+  position: relative;
+  width: 100%;
+  max-width: 300px; // Adjust based on your needs
+  height: 100vh;
+  background-color: rgb(38, 39, 48);
+  box-sizing: border-box;
+  overflow-x: hidden; // Prevent horizontal overflow
+}
+
+.panelContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  overflow-x: hidden;
+}
+
+.navToggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  background: none;
+  border: none;
+  color: #d1d5dc;
+  cursor: pointer;
+  padding: 0.5rem;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: transform 0.1s ease;
+  }
+}
+
+.navbar {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: #1a1d28;
+  transition: transform 0.1s ease;
+  padding: 4rem 1.5rem 2rem;
+  z-index: 90;
+
+  &.open {
+    transform: translateX(100%);
+  }
+}
+
+.navLink {
+  display: block;
+  padding: 1rem;
+  color: #d1d5dc;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  white-space: nowrap; // Prevent text wrapping
+
+  &:hover {
+    background-color: #2e3951;
+    color: #fff;
+  }
+}
+
+.controlPanelBox {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  transition: opacity 0.1s ease;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

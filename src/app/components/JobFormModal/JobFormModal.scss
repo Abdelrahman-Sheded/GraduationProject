@@ -1,0 +1,82 @@
+/* JobFormModal.module.scss */
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  background-color: #151b23;
+  padding: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.modalContent form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modalContent label {
+  color: white;
+  font-weight: 500;
+}
+
+.modalContent input,
+.modalContent textarea {
+  font-family: "Source Sans Pro", sans-serif;
+  margin: 0;
+  border-width: 0;
+  padding: 0.8rem 0.5rem;
+  outline: none;
+  background-color: rgb(14, 17, 23);
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  width: 100%;
+  color: white;
+  line-height: 1.4;
+}
+
+.modalContent button {
+  display: inline-flex;
+  width: 50%;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  padding: 0.7rem 0.2rem;
+  border-radius: 0.5rem;
+  background-color: rgb(43, 44, 54);
+  border: 1px solid rgba(250, 250, 250, 0.2);
+  cursor: pointer;
+  color: inherit;
+}
+
+.modalContent button:hover {
+  border-color: rgb(255, 75, 75);
+  color: rgb(255, 75, 75);
+}
+
+.modalContent button:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
