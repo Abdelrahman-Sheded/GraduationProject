@@ -1,0 +1,336 @@
+@use "sass:map";
+
+// -----------------------------------------------------------------------------
+// Dark Theme Variables
+// -----------------------------------------------------------------------------
+:root {
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* Palette */
+  --bg-main: #17181c;
+  --bg-card: #1e1f25;
+  --border-color: #2a2c33;
+
+  --primary-color: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #1e40af;
+
+  --success-color: #10b981;
+  --success-dark: #059669;
+  --success-light: #052e16;
+
+  --error-color: #ef4444;
+  --error-dark: #dc2626;
+  --error-light: #451a1a;
+
+  --text-dark: #f3f4f6;
+  --text-medium: #d1d5db;
+  --text-light: #9ca3af;
+}
+
+// -----------------------------------------------------------------------------
+// Mixins
+// -----------------------------------------------------------------------------
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center-vert {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+// -----------------------------------------------------------------------------
+// Animations
+// -----------------------------------------------------------------------------
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.fade-enter {
+  animation: fadeIn 240ms ease-out both;
+}
+.fade-exit {
+  animation: fadeOut 200ms ease-in both;
+}
+
+// -----------------------------------------------------------------------------
+// Global Background (inside CSS Modules)
+// -----------------------------------------------------------------------------
+:global(body) {
+  background: var(--bg-main);
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+}
+
+// -----------------------------------------------------------------------------
+// Layout
+// -----------------------------------------------------------------------------
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  color: var(--text-dark);
+}
+
+.header {
+  @include flex-space-between;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+.uploadButton {
+  @include flex-center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: var(--text-dark);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+
+  svg {
+    stroke-width: 2.2;
+  }
+}
+
+.actionButton {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-color);
+  border: none;
+  color: var(--text-dark);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Grid & Cards
+// -----------------------------------------------------------------------------
+.jobGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.jobCard {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  animation: fadeIn 240ms ease-out both;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+  }
+
+  &.active {
+    border-left: 4px solid var(--success-color);
+  }
+}
+
+.cardHeader {
+  @include flex-center-vert;
+  gap: 12px;
+  margin-bottom: 20px;
+  max-width: 100%;
+
+  .statusIcon {
+    color: var(--success-color);
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  h3 {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 18px;
+    margin: 0;
+    color: var(--text-dark);
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+}
+
+.activeBadge {
+  margin-left: auto;
+  padding: 4px 12px;
+  background: var(--success-light);
+  color: var(--success-color);
+  border-radius: 9999px;
+  font-size: 13px;
+}
+
+// Card body
+.cardBody {
+  @include flex-col;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.metaItem {
+  @include flex-center-vert;
+  gap: 8px;
+  color: var(--text-medium);
+  font-size: 14px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Upload Area
+// -----------------------------------------------------------------------------
+.uploadCard {
+  margin: 32px 0;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 40px 16px;
+  text-align: center;
+  background: var(--bg-card);
+  animation: fadeIn 240ms ease-out both;
+}
+
+.dropzone {
+  @include flex-col;
+  gap: 16px;
+  color: var(--text-medium);
+  cursor: pointer;
+
+  p {
+    margin: 0;
+    font-weight: 500;
+  }
+  small {
+    color: var(--text-light);
+  }
+  .uploadIcon {
+    color: var(--primary-color);
+  }
+  .fileInput {
+    display: none;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Loading
+// -----------------------------------------------------------------------------
+.loadingState {
+  @include flex-col;
+  gap: 16px;
+  align-items: center;
+  padding: 64px 0;
+  color: var(--text-medium);
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+// -----------------------------------------------------------------------------
+// Alerts
+// -----------------------------------------------------------------------------
+.alert {
+  @include flex-center-vert;
+  gap: 12px;
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  border-radius: 8px;
+  position: relative;
+  animation: fadeIn 240ms ease-out both;
+
+  &.success {
+    background: var(--success-light);
+    color: var(--success-color);
+  }
+  &.error {
+    background: var(--error-light);
+    color: var(--error-color);
+  }
+}
+
+.closeAlert {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}

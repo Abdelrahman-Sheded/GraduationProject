@@ -8,12 +8,12 @@
 }
 
 .controlOptionsFrame {
-  width: 271px;
+  width: 100%;
   position: relative;
 }
 
 .controlOptions {
-  width: 271px;
+  width: 100%;
   position: relative;
   display: flex;
   flex: 1 1 0%;
@@ -21,7 +21,7 @@
 }
 
 .controlOptionRow {
-  width: 271px;
+  width: 100%;
   position: relative;
 }
 
@@ -82,4 +82,62 @@
 .uploadText {
   font-size: 14px;
   margin-bottom: 0.5rem;
+}
+
+.chatNavigationPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.navButton {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #343541;
+  border: 1px solid #40414f;
+  border-radius: 6px;
+  color: #d1d5dc;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #3b3d4a;
+    border-color: #3b82f6;
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ControlOptions.module.scss
+.navLink {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #343541;
+  border: 1px solid #40414f;
+  border-radius: 6px;
+  color: #d1d5dc;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #3b3d4a;
+    border-color: #3b82f6;
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &[aria-current="page"] {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    font-weight: 500;
+  }
 }
