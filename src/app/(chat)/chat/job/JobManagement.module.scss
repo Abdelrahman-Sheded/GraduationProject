@@ -123,6 +123,9 @@
     font-size: 28px;
     line-height: 1.2;
     margin: 0;
+    background: var(--accent-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 

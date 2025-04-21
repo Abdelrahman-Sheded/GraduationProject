@@ -1,143 +1,123 @@
-.heading {
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: 700;
-  padding: 1.25rem 0 1rem;
-  margin: 0;
-  line-height: 1.2;
-  color: rgb(250, 250, 250);
-}
-
+// ControlOptions.module.scss
 .controlOptionsFrame {
+  --accent-color: #3b82f6;
+  --background-base: #17181c;
+  --surface-elevation-low: #1e1f25;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --transition-timing: 0.25s ease;
+
   width: 100%;
+  height: 100%;
   position: relative;
+  background: var(--background-base);
 }
 
 .controlOptions {
-  width: 100%;
-  position: relative;
+  padding: 1.5rem;
+  max-width: 1200px;
+  height: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+}
+
+.headerSection {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.heading {
+  font-family: "Inter", sans-serif;
   display: flex;
-  flex: 1 1 0%;
   flex-direction: column;
+  gap: 0.5rem;
+
+  .gradientText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
 }
 
-.controlOptionRow {
-  width: 100%;
+.navigationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.navCard {
   position: relative;
-}
-
-.panelLabel {
-  font-size: 14px;
-  color: rgb(250, 250, 250);
+  padding: 1.5rem;
+  background: var(--surface-elevation-low);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all var(--transition-timing);
+  overflow: hidden;
+  min-height: 120px;
   display: flex;
-  margin-bottom: 0.25rem;
-  min-height: 1.5rem;
   align-items: center;
-}
-
-.panelLabel p {
-  margin-bottom: 0px;
-  font-size: 14px;
-  word-break: break-word;
-}
-
-.uploadResumes {
-  background-color: rgb(14, 17, 23);
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  color: rgb(250, 250, 250);
-  cursor: pointer;
-  max-width: 100%;
-}
-
-.uploadLimit small {
-  color: rgba(250, 250, 250, 0.6);
-  font-size: 14px;
-  line-height: 1.25;
-}
-
-.btnUpload {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 400;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
-  min-height: 38.4px;
-  margin: 0px;
-  line-height: 1.6;
-  background-color: rgb(43, 44, 54);
-  border: 1px solid rgba(250, 250, 250, 0.2);
-  cursor: pointer;
-  color: inherit;
-}
-
-.btnUpload:hover {
-  border-color: rgb(255, 75, 75);
-  color: rgb(255, 75, 75);
-}
-
-.uploadText {
-  font-size: 14px;
-  margin-bottom: 0.5rem;
-}
-
-.chatNavigationPanel {
-  display: flex;
   flex-direction: column;
   gap: 0.75rem;
-}
-
-.navButton {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  background: #343541;
-  border: 1px solid #40414f;
-  border-radius: 6px;
-  color: #d1d5dc;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
 
   &:hover {
-    background: #3b3d4a;
-    border-color: #3b82f6;
-    color: #ffffff;
-  }
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.1);
 
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-// ControlOptions.module.scss
-.navLink {
-  display: block;
-  width: 100%;
-  padding: 0.875rem 1rem;
-  background: #343541;
-  border: 1px solid #40414f;
-  border-radius: 6px;
-  color: #d1d5dc;
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #3b3d4a;
-    border-color: #3b82f6;
-    color: #ffffff;
-  }
-
-  &:active {
-    transform: scale(0.98);
+    .cardHoverEffect {
+      opacity: 0.1;
+    }
   }
 
   &[aria-current="page"] {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: white;
-    font-weight: 500;
+    border-color: var(--accent-color);
+    background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), transparent);
+
+    .cardIcon {
+      background: var(--accent-color);
+      color: white;
+    }
   }
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-color);
+  transition: all var(--transition-timing);
+}
+
+.cardLabel {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.cardHoverEffect {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    var(--accent-color) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-timing);
+  pointer-events: none;
 }

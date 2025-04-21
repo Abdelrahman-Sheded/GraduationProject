@@ -92,10 +92,6 @@ export default function CVRankings() {
           >
             <option value={10}>10</option>
             <option value={20}>20</option>
-            <option value={30}>30</option>
-            <option value={40}>40</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
           </select>
           <div className={styles.cvCount}>
             Total CVs: <strong>{totalCVs}</strong>
@@ -113,9 +109,8 @@ export default function CVRankings() {
         <table className={styles.rankingsTable}>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Ranking</th>
               <th>Filename</th>
-              <th>Similarity Score</th>
               <th>Email</th>
               <th>Phone</th>
             </tr>
@@ -125,7 +120,6 @@ export default function CVRankings() {
               <tr key={candidate.id} className={styles.fadeIn}>
                 <td>{candidate.id + 1}</td>
                 <td>{candidate.filename}</td>
-                <td>{candidate.similarity.toFixed(3)}</td>
                 <td>{candidate.contact?.email || "N/A"}</td>
                 <td>{candidate.contact?.phone || "N/A"}</td>
               </tr>

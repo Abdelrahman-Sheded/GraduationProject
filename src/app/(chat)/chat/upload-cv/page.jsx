@@ -86,7 +86,6 @@ export default function UploadCV() {
   return (
     <div className={styles.uploadContainer}>
       <div className={styles.uploadHeader}>
-        <h1 className={styles.uploadTitle}>CV Chatbot</h1>
         <p className={styles.uploadSubtitle}>
           Upload CVs, analyze candidates, and chat with the AI assistant.
         </p>

@@ -4,8 +4,6 @@
 /* ------------------------------------------------------------------------- */
 /*  GLOBAL (shared) THEME VARIABLES                                          */
 /* ------------------------------------------------------------------------- */
-/*  If you already have these in a root theme file, you can delete this      */
-/*  block. They are repeated here so the module works standalone.            */
 :root {
   --bg-main: #17181c;
   --bg-card: #1e1f25;
@@ -72,6 +70,9 @@
   h1 {
     margin: 0;
     font: 600 24px "Inter", system-ui, sans-serif;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    background-clip: text;
+    -webkit-text-fill-color: #0000;
   }
 }
 
@@ -136,7 +137,6 @@
   td {
     padding: 16px;
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
     font-size: 14px;
     max-width: 240px;
     overflow: hidden;
@@ -150,8 +150,18 @@
     position: sticky;
     top: 0; /* sticky header */
   }
-  tr:hover {
-    background: rgba(255, 255, 255, 0.05);
+
+  tr {
+    background: var(--bg-card);
+    border-left: 3px solid transparent;
+
+    &:nth-child(even) {
+      background: #2a2b32;
+    }
+
+    &:hover {
+      border-left: 3px solid var(--success-color);
+    }
   }
 }
 
