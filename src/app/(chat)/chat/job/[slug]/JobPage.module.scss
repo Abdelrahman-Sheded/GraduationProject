@@ -1,125 +1,189 @@
-// Base styles
-
-$primary-color: #4299e1;
-$primary-hover: #3182ce;
-$text-color: #2d3748;
-$text-secondary: #4a5568;
-$border-color: #e2e8f0;
-$success-color: #2f855a;
-$error-color: #c53030;
+// JobPage.module.scss
+$bg-color: #17181c;
+$card-bg: #23252b;
+$text-primary: #f0f0f0;
+$text-secondary: #b0b0b0;
+$accent-color: #4f46e5;
+$accent-hover: #6366f1;
+$border-color: #2d2f36;
+$success-color: #10b981;
+$error-color: #ef4444;
 
 .jobPage {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  color: $text-primary;
+  background-color: $bg-color;
+  min-height: 100vh;
+  // Local scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: $accent-color $card-bg;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $card-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $accent-color;
+    border-radius: 4px;
+  }
 
   @media (min-width: 768px) {
     padding: 3rem 2rem;
   }
 }
 
-// Job header
 .jobHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  text-align: center;
 
   .jobTitle {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.5rem;
     line-height: 1.2;
   }
 }
 
-// Layout grid
 .jobLayout {
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
 
   @media (min-width: 768px) {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
   }
 }
 
-// Job description
 .jobDescription {
+  background: $card-bg;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 1rem;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: $accent-color;
+      border-radius: 3px;
+    }
   }
 
-  p,
-  li {
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: #4a5568;
+  div {
+    line-height: 1.7;
+    color: $text-secondary;
+
+    br {
+      margin-bottom: 1rem;
+      display: block;
+      content: "";
+    }
   }
 }
 
-// Application form
 .applicationForm {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: $card-bg;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   .formTitle {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 1.5rem;
+    color: $text-primary;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: $accent-color;
+      border-radius: 3px;
+    }
   }
 
   .formGroup {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 
     label {
       display: block;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      color: #4a5568;
-      margin-bottom: 0.5rem;
+      color: $text-primary;
+      margin-bottom: 0.75rem;
     }
 
     input,
     textarea {
       width: 100%;
-      padding: 0.625rem;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.375rem;
-      font-size: 0.875rem;
-      transition: border-color 0.2s;
+      padding: 0.75rem 1rem;
+      background: lighten($card-bg, 5%);
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: $text-primary;
+      transition: all 0.3s ease;
 
       &:focus {
         outline: none;
-        border-color: #4299e1;
-        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        border-color: $accent-color;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+      }
+
+      &::placeholder {
+        color: darken($text-secondary, 20%);
       }
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 150px;
+      resize: vertical;
     }
 
     .fileInput {
       width: 100%;
-      font-size: 0.875rem;
+      color: $text-secondary;
 
       &::file-selector-button {
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1.25rem;
         margin-right: 1rem;
-        border-radius: 0.375rem;
+        border-radius: 8px;
         border: 0;
-        background-color: #ebf8ff;
-        color: #3182ce;
+        background-color: rgba($accent-color, 0.1);
+        color: $accent-color;
         font-weight: 500;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.3s ease;
 
         &:hover {
-          background-color: #bee3f8;
+          background-color: rgba($accent-color, 0.2);
         }
       }
     }
@@ -127,42 +191,63 @@ $error-color: #c53030;
 
   .submitButton {
     width: 100%;
-    padding: 0.75rem;
-    background-color: #4299e1;
+    padding: 1rem;
+    background-color: $accent-color;
     color: white;
     font-weight: 500;
+    font-size: 1rem;
     border: none;
-    border-radius: 0.375rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
 
     &:hover {
-      background-color: #3182ce;
+      background-color: $accent-hover;
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
 
     &:disabled {
-      background-color: #a0aec0;
+      background-color: $border-color;
       cursor: not-allowed;
+      transform: none;
     }
   }
 }
 
-// Alerts
 .alert {
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 
   &.success {
-    background-color: #f0fff4;
-    border: 1px solid #c6f6d5;
-    color: #2f855a;
+    background-color: rgba($success-color, 0.1);
+    border-left: 4px solid $success-color;
+    color: lighten($success-color, 10%);
   }
 
   &.error {
-    background-color: #fff5f5;
-    border: 1px solid #fed7d7;
-    color: #c53030;
+    background-color: rgba($error-color, 0.1);
+    border-left: 4px solid $error-color;
+    color: lighten($error-color, 10%);
   }
+}
+
+.formGroup {
+  input,
+  textarea {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+}
+
+.submitButton {
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }

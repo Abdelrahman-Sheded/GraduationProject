@@ -1,25 +1,29 @@
 "use client";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import styles from "./CVRankings.module.scss";
 
+export const dynamic = "force-dynamic";
+
 export default function CVRankings() {
-  const [displayCount, setDisplayCount] = useState(10);
+  const [displayCount, setDisplayCount] = useState(20);
   const [selectedCV, setSelectedCV] = useState("");
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [totalCVs, setTotalCVs] = useState(0);
   const [lastUpdated, setLastUpdated] = useState("");
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const router = useRouter();
+  const initialized = useRef(false);
   const pathname = usePathname();
 
   // Fetch fresh candidates data
-  const fetchCandidates = async () => {
+  const fetchCandidates = useCallback(async () => {
     try {
       setLoading(true);
-
       const response = await fetch(
-        `http://localhost:8000/candidates?top_n=${displayCount}`, // ✅ query param
+        `http://localhost:8000/candidates?top_n=${displayCount}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -38,17 +42,37 @@ export default function CVRankings() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Fetch on initial mount and when displayCount changes
-  useEffect(() => {
-    fetchCandidates();
   }, [displayCount]);
 
-  // Refresh data when pathname changes (page reopened)
+  // Initial fetch
   useEffect(() => {
-    fetchCandidates();
-  }, [pathname]);
+    if (!initialized.current) {
+      fetchCandidates();
+      initialized.current = true;
+    }
+  }, [fetchCandidates]);
+
+  // Refresh when displayCount changes or manual refresh triggered
+  useEffect(() => {
+    if (initialized.current) {
+      fetchCandidates();
+    }
+  }, [displayCount, refreshTrigger, fetchCandidates, pathname]);
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setRefreshTrigger((prev) => prev + 1);
+    };
+
+    window.addEventListener("popstate", handleRouteChange);
+    return () => window.removeEventListener("popstate", handleRouteChange);
+  }, []);
+
+  // Manual refresh function
+  const manualRefresh = useCallback(() => {
+    setRefreshTrigger((prev) => prev + 1);
+  }, []);
 
   const handleRemoveCV = async () => {
     if (!selectedCV) return;
@@ -63,22 +87,28 @@ export default function CVRankings() {
 
       if (!response.ok) throw new Error("Failed to remove CV");
 
-      // ✅ Update UI immediately, no fetch
-      const updatedCandidates = candidates.filter(
-        (candidate) => candidate.filename !== selectedCV
-      );
-
-      setCandidates(updatedCandidates);
-      setTotalCVs((prev) => prev - 1);
+      manualRefresh(); // Use manual refresh instead of direct fetch
       setSelectedCV("");
     } catch (err) {
       setError(err.message);
     }
   };
 
+  // Add this button to your JSX for manual refresh
+  const refreshButton = (
+    <button
+      onClick={manualRefresh}
+      className={styles.refreshButton}
+      disabled={loading}
+    >
+      Refresh Data
+    </button>
+  );
+
   if (loading)
     return <div className={styles.loading}>Loading candidates...</div>;
   if (error) return <div className={styles.error}>Error: {error}</div>;
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -93,13 +123,14 @@ export default function CVRankings() {
             <option value={10}>10</option>
             <option value={20}>20</option>
           </select>
+          {/* {refreshButton} */}
           <div className={styles.cvCount}>
-            Total CVs: <strong>{totalCVs}</strong>
-            {lastUpdated && (
+            {/* Total CVs: <strong>{totalCVs}</strong> */}
+            {/* {lastUpdated && (
               <span className={styles.lastUpdated}>
                 Last updated: {lastUpdated}
               </span>
-            )}
+            )} */}
           </div>
         </div>
       </div>

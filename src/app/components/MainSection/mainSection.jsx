@@ -9,6 +9,7 @@ function MainSection() {
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
   // Auto-scroll to bottom when messages change
@@ -18,8 +19,30 @@ function MainSection() {
     }
   }, [messages]);
 
+  // Simulate typing effect for assistant responses
+  const typeMessage = (fullText, callback) => {
+    setIsTyping(true);
+    let i = 0;
+    const chunkSize = 3; // Characters to add per frame
+    const frameDuration = 16; // ~60fps (16ms per frame)
+
+    const typeNextChunk = () => {
+      if (i < fullText.length) {
+        const end = Math.min(i + chunkSize, fullText.length);
+        callback(fullText.substring(0, end));
+        i = end;
+        requestAnimationFrame(typeNextChunk);
+      } else {
+        setIsTyping(false);
+      }
+    };
+
+    // Start typing
+    requestAnimationFrame(typeNextChunk);
+  };
+
   const handleSend = async () => {
-    if (!inputMessage.trim() || isLoading) return;
+    if (!inputMessage.trim() || isLoading || isTyping) return;
 
     try {
       // Add user message to chat
@@ -34,9 +57,6 @@ function MainSection() {
       setInputMessage("");
       setIsLoading(true);
 
-      // 🕒 Start timing
-      const startTime = Date.now();
-
       // API call to chat endpoint
       const res = await fetch("http://localhost:8000/chat", {
         method: "POST",
@@ -46,23 +66,33 @@ function MainSection() {
         }),
       });
 
-      // 🕒 End timing
-      const duration = Date.now() - startTime;
-      console.log(`⏱️ API response time: ${duration}ms`);
-
       if (!res.ok) throw new Error(res.statusText);
 
       const data = await res.json();
 
-      // Add assistant response to chat
+      // Add empty assistant response that will be filled by typing effect
       setMessages((prev) => [
         ...prev,
         {
           type: "assistant",
-          content: data.response,
+          content: "",
           timestamp: new Date().toISOString(),
+          isTyping: true,
         },
       ]);
+
+      // Start typing animation
+      typeMessage(data.response, (typedText) => {
+        setMessages((prev) => {
+          const newMessages = [...prev];
+          const lastMessage = newMessages[newMessages.length - 1];
+          if (lastMessage.type === "assistant") {
+            lastMessage.content = typedText;
+            lastMessage.isTyping = typedText.length < data.response.length;
+          }
+          return newMessages;
+        });
+      });
     } catch (error) {
       console.error("Chat error:", error);
       setMessages((prev) => [
@@ -110,6 +140,7 @@ function MainSection() {
             ) : (
               <AssistantResponse response={msg.content} />
             )}
+            {msg.isTyping && <span className={styles.cursor}>|</span>}
           </div>
         ))}
         {isLoading && (
@@ -133,13 +164,13 @@ function MainSection() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             rows={1}
-            disabled={isLoading}
-            style={{ minHeight: "56px" }}
+            disabled={isLoading || isTyping}
+            style={{ minHeight: "60px" }}
           />
           <button
             onClick={handleSend}
             className={styles.sendButton}
-            disabled={isLoading}
+            disabled={isLoading || isTyping}
             aria-label="Send message"
           >
             <FiSend className={styles.sendIcon} />
