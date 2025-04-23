@@ -1,0 +1,230 @@
+.uploadContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #1a1d28;
+  border-radius: 12px;
+}
+
+.uploadHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.uploadTitle {
+  color: #ececf1;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.uploadSubtitle {
+  color: #d1d5dc;
+  font-size: 1.1rem;
+}
+
+.uploadContent {
+  background: #202123;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.uploadSectionTitle {
+  color: #ececf1;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.uploadGuidelines {
+  background: #2d2f34;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.uploadGuidelinesTitle {
+  color: #d1d5dc;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.uploadGuidelinesList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.uploadGuidelinesItem {
+  color: #d1d5dc;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.uploadGuidelinesIcon {
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+.uploadDropzone {
+  border: 2px dashed #343541;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+  }
+}
+
+.uploadDropzoneActive {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.uploadDropzoneContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.uploadDropzoneIcon {
+  width: 48px;
+  height: 48px;
+  stroke-width: 1.5;
+  color: #3b82f6;
+}
+
+.uploadDropzoneText {
+  color: #ececf1;
+  margin: 0;
+  font-weight: 500;
+}
+
+.uploadDropzoneHint {
+  color: #8e8e9e;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.uploadSubmitButton {
+  background: #3b82f6;
+  color: white;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #2563eb;
+  }
+
+  &:disabled {
+    background: #1e3a8a;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.uploadMessage {
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+  background: #059669;
+  color: white;
+
+  &[data-error="true"] {
+    background: #dc2626;
+  }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  .leftControls,
+  .rightControls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .rightControls {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .jobDescription {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+
+    strong {
+      color: #2c3e50;
+    }
+  }
+
+  .uploadButton {
+    padding: 0.25rem 0.5rem;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #d0d0d0;
+    }
+  }
+}
+
+.jobUpload {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-top: 1rem;
+  border: 1px solid #eee;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  input[type="file"] {
+    margin-bottom: 1rem;
+  }
+}
+
+.uploadSubmitButton {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,72 @@
+/* MainSection.module.scss */
+
+.mainSectionPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 50vh;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.content h1,
+.content h2 {
+  color: #0056b3;
+}
+
+.content p {
+  margin-bottom: 10px;
+}
+
+.content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.content li {
+  margin-bottom: 5px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.content li::before {
+  content: "➤";
+  position: absolute;
+  left: 0;
+}
+
+.stickyBottom {
+  padding: 10px;
+  width: 100%;
+}
+
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.chatInput {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  border: 1px solid #444;
+  border-radius: 20px;
+  background-color: #262730;
+  outline: none;
+  color: white;
+}
+
+.chatInput:focus {
+  border-color: red;
+}
+
+.chatInput::placeholder {
+  color: #aaa;
+}

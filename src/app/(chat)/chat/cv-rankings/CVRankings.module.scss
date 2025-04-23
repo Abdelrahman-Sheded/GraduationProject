@@ -1,0 +1,224 @@
+/* CVRankings.module.scss ---------------------------------------------------- */
+@use "sass:map";
+
+/* ------------------------------------------------------------------------- */
+/*  GLOBAL (shared) THEME VARIABLES                                          */
+/* ------------------------------------------------------------------------- */
+:root {
+  --bg-main: #17181c;
+  --bg-card: #1e1f25;
+  --border-color: #2a2c33;
+
+  --text-dark: #f3f4f6;
+  --text-medium: #d1d5db;
+  --text-light: #9ca3af;
+
+  --primary-color: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #60a5fa;
+
+  --error-color: #dc3545;
+  --error-dark: #bb2d3b;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  ANIMATIONS                                                               */
+/* ------------------------------------------------------------------------- */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeSlideOut {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+.fadeIn {
+  animation: fadeSlideIn 0.35s ease forwards;
+}
+.fadeOut {
+  animation: fadeSlideOut 0.25s ease forwards;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  PAGE LAYOUT                                                              */
+/* ------------------------------------------------------------------------- */
+.container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--text-dark);
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    margin: 0;
+    font: 600 24px "Inter", system-ui, sans-serif;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    background-clip: text;
+    -webkit-text-fill-color: #0000;
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+/*  CONTROL BAR                                                              */
+/* ------------------------------------------------------------------------- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  span {
+    font-size: 14px;
+    color: var(--text-medium);
+  }
+  .cvCount {
+    font-size: 14px;
+    color: var(--text-light);
+  }
+  .lastUpdated {
+    margin-left: 8px;
+    font-style: italic;
+  }
+}
+
+.select {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  TABLE                                                                    */
+/* ------------------------------------------------------------------------- */
+.tableSection {
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px 0;
+  }
+}
+
+.tableWrapper {
+  /* new helper to enable horizontal scroll */
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.rankingsTable {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: var(--bg-card);
+
+  th,
+  td {
+    padding: 16px;
+    text-align: left;
+    font-size: 14px;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  th {
+    background: var(--border-color);
+    font-weight: 600;
+    color: var(--text-dark);
+    position: sticky;
+    top: 0; /* sticky header */
+  }
+
+  tr {
+    background: var(--bg-card);
+    border-left: 3px solid transparent;
+
+    &:nth-child(even) {
+      background: #2a2b32;
+    }
+
+    &:hover {
+      border-left: 3px solid #10b981;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+/*  REMOVE SECTION                                                           */
+/* ------------------------------------------------------------------------- */
+.removeSection {
+  border-top: 1px solid var(--border-color);
+  padding-top: 32px;
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px 0;
+  }
+}
+
+.removeControls {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  select {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+  }
+}
+
+.removeButton {
+  padding: 12px 24px;
+  background: var(--error-color);
+  color: var(--text-dark);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--error-dark);
+    transform: translateY(-2px);
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+/*  MESSAGES                                                                 */
+/* ------------------------------------------------------------------------- */
+.loading,
+.error {
+  padding: 32px;
+  text-align: center;
+  font-size: 18px;
+}
+.error {
+  color: var(--error-color);
+}
