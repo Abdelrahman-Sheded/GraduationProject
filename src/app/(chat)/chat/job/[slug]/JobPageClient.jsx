@@ -1,4 +1,3 @@
-// src/app/job/[slug]/JobPageClient.js
 "use client";
 
 import { useState } from "react";
@@ -16,6 +15,11 @@ export default function JobPageClient({ job }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState(null);
+
+  // Format job title for display
+  const formattedJobTitle = job.filename
+    .replace(/_/g, " ")
+    .replace(/\.pdf$/i, "");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,19 +81,25 @@ export default function JobPageClient({ job }) {
   return (
     <div className={styles.jobPage}>
       <div className={styles.jobHeader}>
-        <h1 className={styles.jobTitle}>
-          {job.filename.replace(/_/g, " ").replace(/\.pdf$/, "")}
-        </h1>
+        <h1 className={styles.jobTitle}>{formattedJobTitle}</h1>
+        
+        
       </div>
 
       <div className={styles.jobLayout}>
         <div className={styles.jobDescription}>
           <h2>Job Description</h2>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: job.requirements.replace(/\n/g, "<br />"),
-            }}
-          />
+          {job.requirements ? (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: job.requirements.replace(/\n/g, "<br />"),
+              }}
+            />
+          ) : (
+            <p>No job description available.</p>
+          )}
+
+          
         </div>
 
         <div className={styles.applicationForm}>
@@ -98,6 +108,7 @@ export default function JobPageClient({ job }) {
           {submitSuccess ? (
             <div className={`${styles.alert} ${styles.success}`}>
               <p>Your application has been submitted successfully!</p>
+              <p>We'll review your application and get back to you soon.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -108,7 +119,7 @@ export default function JobPageClient({ job }) {
               )}
 
               <div className={styles.formGroup}>
-                <label htmlFor="name">Full Name</label>
+                <label htmlFor="name">Full Name *</label>
                 <input
                   type="text"
                   id="name"
@@ -116,11 +127,12 @@ export default function JobPageClient({ job }) {
                   required
                   value={formData.name}
                   onChange={handleChange}
+                  placeholder="John Doe"
                 />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email *</label>
                 <input
                   type="email"
                   id="email"
@@ -128,11 +140,12 @@ export default function JobPageClient({ job }) {
                   required
                   value={formData.email}
                   onChange={handleChange}
+                  placeholder="your.email@example.com"
                 />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phone">Phone Number *</label>
                 <input
                   type="tel"
                   id="phone"
@@ -140,6 +153,7 @@ export default function JobPageClient({ job }) {
                   required
                   value={formData.phone}
                   onChange={handleChange}
+                  placeholder="+1 (123) 456-7890"
                 />
               </div>
 
@@ -148,23 +162,25 @@ export default function JobPageClient({ job }) {
                 <textarea
                   id="coverLetter"
                   name="coverLetter"
-                  rows="4"
+                  rows="6"
                   value={formData.coverLetter}
                   onChange={handleChange}
+                  placeholder="Tell us why you're the perfect candidate for this position..."
                 />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="cv">Upload CV (PDF only)</label>
+                <label htmlFor="cv">Upload CV/Resume (PDF only) *</label>
                 <input
                   type="file"
                   id="cv"
                   name="cv"
                   required
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx"
                   onChange={handleFileChange}
                   className={styles.fileInput}
                 />
+                <small>Max file size: 5MB</small>
               </div>
 
               <button
@@ -172,7 +188,14 @@ export default function JobPageClient({ job }) {
                 disabled={isSubmitting}
                 className={styles.submitButton}
               >
-                {isSubmitting ? "Submitting..." : "Submit Application"}
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner}></span>
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application"
+                )}
               </button>
             </form>
           )}

@@ -2,6 +2,11 @@
 import { useEffect, useState } from "react";
 import { CheckCircle, Clock, UploadCloud } from "react-feather"; // Install react-feather
 import styles from "./JobManagement.module.scss";
+<<<<<<< HEAD
+import Link from "next/link";
+import { formatJobSlug } from '@/app/utils/formatJobSlug';
+=======
+>>>>>>> 170c7647e9f6a7b4d2982d6b165aae4fbe2c3e66
 
 export default function JobManagementPage() {
   const [jobFiles, setJobFiles] = useState([]);
@@ -143,6 +148,41 @@ export default function JobManagementPage() {
           <p>Loading requirements...</p>
         </div>
       ) : (
+<<<<<<< HEAD
+<div className={styles.jobGrid}>
+  {jobFiles.map((job, idx) => {
+    const jobSlug = formatJobSlug(job.filename);
+    
+    return (
+      <div key={idx} className={`${styles.jobCard} ${job.is_current ? styles.active : ""}`}>
+        <Link href={`/chat/job/${jobSlug}`} passHref className={styles.jobLink}>
+          {/* Card content remains the same */}
+          <div className={styles.cardHeader}>
+            <CheckCircle size={20} className={styles.statusIcon} />
+            <h3>{job.filename.replace(/_/g, ' ')}</h3> {/* Display with spaces instead of underscores */}
+            {job.is_current && <span className={styles.activeBadge}>Active</span>}
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.metaItem}>
+              <Clock size={16} />
+              <span>Created: {job.created}</span>
+            </div>
+          </div>
+        </Link>
+
+        {!job.is_current && (
+          <button
+            className={styles.actionButton}
+            onClick={() => setAsActive(job.path)}
+          >
+            Set as Active
+          </button>
+        )}
+      </div>
+    );
+  })}
+</div>
+=======
         <div className={styles.jobGrid}>
           {jobFiles.map((job, idx) => (
             <div
@@ -177,6 +217,7 @@ export default function JobManagementPage() {
             </div>
           ))}
         </div>
+>>>>>>> 170c7647e9f6a7b4d2982d6b165aae4fbe2c3e66
       )}
     </div>
   );
