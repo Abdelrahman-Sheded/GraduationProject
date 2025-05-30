@@ -1,16 +1,34 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FileText,
   MessageSquare,
   Award,
   User,
   UploadCloud,
+  LogIn,
+  LogOut,
 } from "react-feather";
-import styles from "./ControlOptions.module.scss";
+import styles from "./Navigation.module.scss";
 
-function ControlOptions() {
+function Navigation() {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem("authToken");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setIsLoggedIn(false);
+    router.push("/login");
+  };
+
   const navigationItems = [
     {
       path: "/chat/cv-rankings",
@@ -40,8 +58,8 @@ function ControlOptions() {
   ];
 
   return (
-    <div className={styles.controlOptionsFrame}>
-      <div className={styles.controlOptions}>
+    <div className={styles.navigationFrame}>
+      <div className={styles.navigation}>
         <div className={styles.headerSection}>
           <h1 className={styles.heading}>
             <span className={styles.gradientText}>Recruitment Suite</span>
@@ -62,10 +80,28 @@ function ControlOptions() {
               <div className={styles.cardHoverEffect} />
             </Link>
           ))}
+
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className={styles.navCard}>
+              <div className={styles.cardIcon}>
+                <LogOut size={18} />
+              </div>
+              <span className={styles.cardLabel}>Logout</span>
+              <div className={styles.cardHoverEffect} />
+            </button>
+          ) : (
+            <Link href="/login" className={styles.navCard} passHref>
+              <div className={styles.cardIcon}>
+                <LogIn size={18} />
+              </div>
+              <span className={styles.cardLabel}>Login</span>
+              <div className={styles.cardHoverEffect} />
+            </Link>
+          )}
         </nav>
       </div>
     </div>
   );
 }
 
-export default ControlOptions;
+export default Navigation;

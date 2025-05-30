@@ -1,110 +1,179 @@
+@use "sass:map";
+
+// -----------------------------------------------------------------------------
+// Dark Theme Variables
+// -----------------------------------------------------------------------------
+:root {
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* Palette */
+  --bg-main: #17181c;
+  --bg-card: #1e1f25;
+  --border-color: #2a2c33;
+
+  --primary-color: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #1e40af;
+
+  --success-color: #10b981;
+  --success-dark: #059669;
+  --success-light: #052e16;
+
+  --error-color: #ef4444;
+  --error-dark: #dc2626;
+  --error-light: #451a1a;
+
+  --text-dark: #f3f4f6;
+  --text-medium: #d1d5db;
+  --text-light: #9ca3af;
+}
+
+// -----------------------------------------------------------------------------
+// Mixins
+// -----------------------------------------------------------------------------
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+// -----------------------------------------------------------------------------
+// Animations
+// -----------------------------------------------------------------------------
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Global Background
+// -----------------------------------------------------------------------------
+:global(body) {
+  background: var(--bg-main);
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+}
+
+// -----------------------------------------------------------------------------
+// Login Page Styles
+// -----------------------------------------------------------------------------
 .login {
+  min-height: 100vh;
+  @include flex-center;
+  background: var(--bg-main);
+  padding: 2rem;
+}
+
+.loginContainer {
   width: 100%;
-  height: 100vh;
-  position: relative;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease-out;
+}
 
-  .loginContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 70%;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .loginForm {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 360px;
-    height: 20rem;
-    padding: 40px;
-    background: #151b23;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    border: 1px solid #303740;
-    gap: 1.5rem;
-  }
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
 
   h1 {
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 700;
-    padding: 1.25rem 0 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-dark);
     margin: 0;
-    line-height: 1.2;
-    color: rgb(250, 250, 250);
+    background: linear-gradient(
+      135deg,
+      var(--primary-color),
+      var(--success-color)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
+}
 
-  .panelLabel {
-    font-size: 14px;
-    color: rgb(250, 250, 250);
-    display: flex;
-    margin-bottom: 0.25rem;
-    align-items: center;
+.loginForm {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
 
-    p {
-      margin: 0;
-      font-size: 14px;
-      word-break: break-word;
-    }
-  }
+.formGroup {
+  margin-bottom: 1.5rem;
+}
 
-  .panelInputBox {
-    position: relative;
-    background-color: rgb(14, 17, 23);
-    border-radius: 0.5rem;
-    border: 1px solid transparent;
-    display: flex;
-    padding-right: 14px;
-    transition: background-color 200ms cubic-bezier(0.2, 0.8, 0.4, 1);
-  }
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-medium);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
 
-  .panelInput {
-    font-family: "Source Sans Pro", sans-serif;
-    margin: 0;
-    border: none;
-    padding: 0.8rem 0.5rem;
-    caret-color: rgb(250, 250, 250);
-    background-color: transparent;
-    width: 100%;
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-dark);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+
+  &:focus {
     outline: none;
-    line-height: 1.4;
-    color: white;
+    border-color: var(--primary-color);
   }
 
-  .inputPlaceholder {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 0.5rem;
-    transition: all 0.2s;
-    color: rgba(250, 250, 250, 0.5);
+  &::placeholder {
+    color: var(--text-light);
+  }
+}
+
+.error {
+  background: var(--error-light);
+  color: var(--error-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--error-color);
+}
+
+.loginButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
   }
 
-  .panelInput:focus + .inputPlaceholder,
-  .panelInput:not(:placeholder-shown) + .inputPlaceholder {
-    transform: translateY(-130%);
-    font-size: 10px;
-    color: rgba(250, 250, 250, 0.5);
-  }
-
-  .btnLogin {
-    display: inline-flex;
-    width: 100px;
-    justify-content: center;
-    align-items: center;
-    font-weight: 400;
-    border-radius: 0.5rem;
-    min-height: 38.4px;
-    color: inherit;
-    background-color: rgb(43, 44, 54);
-    border: 1px solid rgba(250, 250, 250, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      border-color: rgb(255, 75, 75);
-      color: rgb(255, 75, 75);
-    }
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 }

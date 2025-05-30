@@ -20,57 +20,84 @@ export default function CVRankings() {
 
   // Fetch fresh candidates data
   const fetchCandidates = useCallback(async () => {
+    console.log("🔄 Fetching candidates...", {
+      displayCount,
+      pathname,
+      refreshTrigger,
+      initialized: initialized.current,
+    });
+
     try {
       setLoading(true);
+      const timestamp = new Date().getTime();
       const response = await fetch(
-        `http://localhost:8000/candidates?top_n=${displayCount}`,
+        `http://localhost:8000/candidates?top_n=${displayCount}&t=${timestamp}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
+          next: { revalidate: 0 },
         }
       );
 
       if (!response.ok) throw new Error("Failed to fetch candidates");
 
       const data = await response.json();
+      console.log("✅ Candidates fetched successfully:", {
+        count: data.candidates.length,
+        timestamp: new Date(data.timestamp).toLocaleTimeString(),
+      });
+
       setCandidates(data.candidates);
       setTotalCVs(data.total_cvs);
       setLastUpdated(new Date(data.timestamp).toLocaleTimeString());
+      setError("");
     } catch (err) {
+      console.error("❌ Error fetching candidates:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   }, [displayCount]);
 
-  // Initial fetch
+  // Initial fetch and route change handling
   useEffect(() => {
-    if (!initialized.current) {
-      fetchCandidates();
-      initialized.current = true;
-    }
-  }, [fetchCandidates]);
+    console.log("📍 Route changed or component mounted:", {
+      pathname,
+      initialized: initialized.current,
+    });
 
-  // Refresh when displayCount changes or manual refresh triggered
-  useEffect(() => {
-    if (initialized.current) {
-      fetchCandidates();
-    }
-  }, [displayCount, refreshTrigger, fetchCandidates, pathname]);
-
-  // Handle browser back/forward navigation
-  useEffect(() => {
-    const handleRouteChange = () => {
-      setRefreshTrigger((prev) => prev + 1);
+    // Reset initialization when leaving the page
+    const cleanup = () => {
+      console.log("🧹 Cleaning up...");
+      initialized.current = false;
     };
 
-    window.addEventListener("popstate", handleRouteChange);
-    return () => window.removeEventListener("popstate", handleRouteChange);
-  }, []);
+    // Force a fresh fetch
+    fetchCandidates();
+    initialized.current = true;
+
+    return cleanup;
+  }, [fetchCandidates, pathname]);
+
+  // Add a visibility change handler
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        console.log("👁️ Page became visible, refreshing data...");
+        fetchCandidates();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [fetchCandidates]);
 
   // Manual refresh function
   const manualRefresh = useCallback(() => {
+    console.log("🔄 Manual refresh triggered");
     setRefreshTrigger((prev) => prev + 1);
   }, []);
 

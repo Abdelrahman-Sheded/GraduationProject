@@ -4,8 +4,13 @@ import { FiSend } from "react-icons/fi";
 import styles from "./MainSection.module.scss";
 import UserMessage from "@/app/components/UserMessage/userMessage";
 import AssistantResponse from "@/app/components/AssistantResponse/assistantResponse";
+import { useRouter } from "next/navigation";
+
+const CHAT_HISTORY_API = "http://localhost:8002/api/messages/";
+const CHAT_API = "http://localhost:8000/chat";
 
 function MainSection() {
+  const router = useRouter();
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,11 +46,70 @@ function MainSection() {
     requestAnimationFrame(typeNextChunk);
   };
 
+  useEffect(() => {
+    // Fetch chat history from Django when the component mounts
+    const fetchChatHistory = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          router.push("/login");
+          return;
+        }
+
+        const res = await fetch(CHAT_HISTORY_API, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            // Token is invalid or expired
+            localStorage.removeItem("authToken");
+            router.push("/login");
+            return;
+          }
+          throw new Error(res.statusText);
+        }
+
+        const data = await res.json();
+
+        // Map the API data to your message format
+        const formattedMessages = data.map((msg) => ({
+          type: msg.sender === "user" ? "user" : "assistant",
+          content: msg.message,
+          timestamp: msg.timestamp,
+        }));
+
+        setMessages(formattedMessages);
+      } catch (error) {
+        console.error("Failed to fetch chat history:", error);
+        setMessages([
+          {
+            type: "assistant",
+            content: "Failed to load chat history. Please try again.",
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+      }
+    };
+
+    fetchChatHistory();
+  }, [router]);
+
   const handleSend = async () => {
     if (!inputMessage.trim() || isLoading || isTyping) return;
 
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     try {
-      // Add user message to chat
+      // Add user message to chat UI
       setMessages((prev) => [
         ...prev,
         {
@@ -57,10 +121,35 @@ function MainSection() {
       setInputMessage("");
       setIsLoading(true);
 
-      // API call to chat endpoint
-      const res = await fetch("http://localhost:8000/chat", {
+      // 1. Save user message to Django
+      const saveUserMessage = await fetch(CHAT_HISTORY_API, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({
+          message: inputMessage,
+          sender: "user",
+        }),
+      });
+
+      if (!saveUserMessage.ok) {
+        if (saveUserMessage.status === 401) {
+          localStorage.removeItem("authToken");
+          router.push("/login");
+          return;
+        }
+        throw new Error("Failed to save message");
+      }
+
+      // 2. Get LLM response from FastAPI
+      const res = await fetch(CHAT_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
         body: JSON.stringify({
           messages: [{ role: "user", content: inputMessage }],
         }),
@@ -70,7 +159,7 @@ function MainSection() {
 
       const data = await res.json();
 
-      // Add empty assistant response that will be filled by typing effect
+      // Add empty assistant response to UI (for typing effect)
       setMessages((prev) => [
         ...prev,
         {
@@ -81,7 +170,29 @@ function MainSection() {
         },
       ]);
 
-      // Start typing animation
+      // 3. Save assistant response to Django
+      const saveAssistantMessage = await fetch(CHAT_HISTORY_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({
+          message: data.response,
+          sender: "model",
+        }),
+      });
+
+      if (!saveAssistantMessage.ok) {
+        if (saveAssistantMessage.status === 401) {
+          localStorage.removeItem("authToken");
+          router.push("/login");
+          return;
+        }
+        throw new Error("Failed to save response");
+      }
+
+      // Typing animation for assistant response
       typeMessage(data.response, (typedText) => {
         setMessages((prev) => {
           const newMessages = [...prev];

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import ControlOptions from "@/app/components/ControlOptions/controlOptions";
+import Navigation from "@/app/components/ControlOptions/Navigation";
 import styles from "./ControlPanel.module.scss";
 import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -38,7 +38,7 @@ function ControlPanel() {
             isNavOpen ? styles.hidden : ""
           }`}
         >
-          <ControlOptions />
+          <Navigation />
         </div>
       </div>
     </div>
