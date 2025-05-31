@@ -4,17 +4,71 @@
   height: 100vh;
   background: #17181c;
   font-family: "Segoe UI", system-ui, sans-serif;
+
+  // Custom scrollbar styles
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #2d2f34;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #3d3f44;
+    }
+  }
 }
 
 .chatHistory {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-width: 900px;
-  width: 900px;
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1.5rem;
   gap: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(45, 47, 52, 0.5) transparent;
+
+  // Chrome scrollbar styles
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(45, 47, 52, 0.5);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+
+    &:hover {
+      background: rgba(45, 47, 52, 0.8);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    padding: 1rem;
+    gap: 1rem;
+  }
 }
 
 .userMessageWrapper {
@@ -31,6 +85,18 @@
 
 .inputContainer {
   padding: 1.5rem;
+  position: relative;
+  background: linear-gradient(
+    to top,
+    rgba(23, 24, 28, 1) 0%,
+    rgba(23, 24, 28, 0.95) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  @media (max-width: 1200px) {
+    padding: 1rem;
+  }
 }
 
 .inputWrapper {
@@ -58,6 +124,11 @@
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
+
+  @media (max-width: 1200px) {
+    padding: 0.75rem 3.5rem 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
 }
 
 .sendButton {
@@ -77,11 +148,21 @@
     color: #ececf1;
     background: rgba(255, 255, 255, 0.1);
   }
+
+  @media (max-width: 1200px) {
+    right: 0.5rem;
+    padding: 0.4rem;
+  }
 }
 
 .sendIcon {
   width: 1.5rem;
   height: 1.5rem;
+
+  @media (max-width: 1200px) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 .typingIndicator {

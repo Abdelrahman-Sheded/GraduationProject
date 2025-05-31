@@ -51,28 +51,42 @@
 /*  PAGE LAYOUT                                                              */
 /* ------------------------------------------------------------------------- */
 .container {
-  padding: 32px;
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   color: var(--text-dark);
   background: var(--bg-main);
   min-height: 100vh;
+
+  @media (max-width: 1200px) {
+    padding: 1rem;
+  }
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border-color);
 
   h1 {
     margin: 0;
-    font: 600 24px "Inter", system-ui, sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #ececf1;
     background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
     background-clip: text;
     -webkit-text-fill-color: #0000;
+  }
+
+  @media (max-width: 1200px) {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
   }
 }
 
@@ -82,7 +96,7 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1rem;
   flex-wrap: wrap;
 
   span {
@@ -97,26 +111,46 @@
     margin-left: 8px;
     font-style: italic;
   }
+
+  @media (max-width: 1200px) {
+    gap: 0.75rem;
+  }
 }
 
 .select {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
-  color: var(--text-dark);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #2d2f34;
+  background: #343541;
+  color: #ececf1;
   cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
 }
 
 /* ------------------------------------------------------------------------- */
 /*  TABLE                                                                    */
 /* ------------------------------------------------------------------------- */
 .tableSection {
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   h2 {
-    font-size: 20px;
-    margin: 0 0 16px 0;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ececf1;
+  }
+
+  @media (max-width: 1200px) {
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
   }
 }
 
@@ -129,38 +163,34 @@
 
 .rankingsTable {
   width: 100%;
-  min-width: 760px;
   border-collapse: collapse;
-  background: var(--bg-card);
+  min-width: 600px; // Ensure table doesn't get too compressed
 
   th,
   td {
-    padding: 16px;
+    padding: 1rem;
     text-align: left;
-    font-size: 14px;
-    max-width: 240px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    border-bottom: 1px solid #2d2f34;
   }
+
   th {
-    background: var(--border-color);
+    background: #2d2f34;
+    color: #ececf1;
     font-weight: 600;
-    color: var(--text-dark);
-    position: sticky;
-    top: 0; /* sticky header */
   }
 
-  tr {
-    background: var(--bg-card);
-    border-left: 3px solid transparent;
+  td {
+    color: #a0a0a0;
+  }
 
-    &:nth-child(even) {
-      background: #2a2b32;
-    }
+  tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
 
-    &:hover {
-      border-left: 3px solid #10b981;
+  @media (max-width: 1200px) {
+    th,
+    td {
+      padding: 0.75rem;
     }
   }
 }
@@ -172,40 +202,50 @@
   border-top: 1px solid var(--border-color);
   padding-top: 32px;
   h2 {
-    font-size: 20px;
-    margin: 0 0 16px 0;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ececf1;
+  }
+
+  @media (max-width: 1200px) {
+    h2 {
+      font-size: 1.25rem;
+    }
   }
 }
 
 .removeControls {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 
   select {
     flex: 1;
     min-width: 200px;
     max-width: 400px;
   }
+
+  @media (max-width: 1200px) {
+    gap: 0.75rem;
+  }
 }
 
 .removeButton {
-  padding: 12px 24px;
-  background: var(--error-color);
-  color: var(--text-dark);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   border: none;
-  border-radius: 6px;
+  background: #ef4444;
+  color: white;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: var(--error-dark);
-    transform: translateY(-2px);
+    background: #dc2626;
   }
+
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
@@ -215,10 +255,11 @@
 /* ------------------------------------------------------------------------- */
 .loading,
 .error {
-  padding: 32px;
+  padding: 2rem;
   text-align: center;
-  font-size: 18px;
+  color: #ececf1;
+  font-size: 1.25rem;
 }
 .error {
-  color: var(--error-color);
+  color: #ef4444;
 }

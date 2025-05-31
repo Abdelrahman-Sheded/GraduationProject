@@ -62,7 +62,9 @@ function Navigation() {
       <div className={styles.navigation}>
         <div className={styles.headerSection}>
           <h1 className={styles.heading}>
-            <span className={styles.gradientText}>Recruitment Suite</span>
+            <Link href="/" className={styles.gradientText}>
+              Recruitment Suite
+            </Link>
             <span className={styles.subHeading}>Navigation Hub</span>
           </h1>
         </div>
