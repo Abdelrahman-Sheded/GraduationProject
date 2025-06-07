@@ -32,55 +32,56 @@ function Login() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL.endsWith("/")
-        ? process.env.NEXT_PUBLIC_API_URL + "api-token-auth/"
-        : process.env.NEXT_PUBLIC_API_URL + "/api-token-auth/";
+      // Remove trailing slash if present and add the endpoint
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
+      const apiUrl = `${baseUrl}/api-token-auth/`;
+
+      console.log("Attempting login to:", apiUrl); // Debug log
 
       const res = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          // Add Origin header
-          Origin: window.location.origin,
+          "X-Requested-With": "XMLHttpRequest", // Add this for Django
         },
         body: JSON.stringify({ username, password }),
-        // Change credentials to 'include' for CORS
         credentials: "include",
-        // Add mode: 'cors' explicitly
-        mode: "cors",
       });
 
-      if (!res.ok) {
-        if (res.status === 308) {
-          // Handle redirect
-          const redirectUrl = res.headers.get("Location");
-          if (redirectUrl) {
-            const redirectRes = await fetch(redirectUrl, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Origin: window.location.origin,
-              },
-              body: JSON.stringify({ username, password }),
-              credentials: "include",
-              mode: "cors",
-            });
+      console.log("Response status:", res.status); // Debug log
 
-            if (!redirectRes.ok) {
-              const errorData = await redirectRes.json();
-              throw new Error(
-                errorData.detail || "Invalid username or password"
-              );
-            }
+      if (res.status === 308) {
+        // Handle redirect
+        const redirectUrl = res.headers.get("Location");
+        console.log("Redirect URL:", redirectUrl); // Debug log
 
-            const data = await redirectRes.json();
-            handleSuccessfulLogin(data);
-            return;
+        if (redirectUrl) {
+          const redirectRes = await fetch(redirectUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-Requested-With": "XMLHttpRequest", // Add this for Django
+            },
+            body: JSON.stringify({ username, password }),
+            credentials: "include",
+          });
+
+          console.log("Redirect response status:", redirectRes.status); // Debug log
+
+          if (!redirectRes.ok) {
+            const errorData = await redirectRes.json();
+            throw new Error(errorData.detail || "Invalid username or password");
           }
-        }
 
+          const data = await redirectRes.json();
+          handleSuccessfulLogin(data);
+          return;
+        }
+      }
+
+      if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.detail || "Invalid username or password");
       }
