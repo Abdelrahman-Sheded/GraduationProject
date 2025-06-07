@@ -38,6 +38,23 @@ function Login() {
 
       console.log("Attempting login to:", apiUrl); // Debug log
 
+      // First, try a HEAD request to check if the endpoint exists
+      try {
+        const headRes = await fetch(apiUrl, {
+          method: "HEAD",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+        console.log("HEAD request status:", headRes.status);
+        console.log(
+          "HEAD request headers:",
+          Object.fromEntries(headRes.headers.entries())
+        );
+      } catch (e) {
+        console.warn("HEAD request failed:", e);
+      }
+
       const res = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -54,6 +71,19 @@ function Login() {
         "Response headers:",
         Object.fromEntries(res.headers.entries())
       ); // Debug log
+
+      // Handle specific status codes
+      if (res.status === 405) {
+        throw new Error(
+          "Method not allowed. The API endpoint might not support POST requests or might be protected."
+        );
+      }
+
+      if (res.status === 404) {
+        throw new Error(
+          "API endpoint not found. Please check if the API URL is correct."
+        );
+      }
 
       // Check if the response is JSON
       const contentType = res.headers.get("content-type");
@@ -157,6 +187,14 @@ function Login() {
         err.message.includes("NetworkError")
       ) {
         setError("Connection error. Please check your network and try again.");
+      } else if (err.message.includes("Method not allowed")) {
+        setError(
+          "API endpoint error. Please check if the API URL is correct and supports POST requests."
+        );
+      } else if (err.message.includes("API endpoint not found")) {
+        setError(
+          "API endpoint not found. Please check if the API URL is correct."
+        );
       } else if (err.message.includes("HTML instead of JSON")) {
         setError(
           "Server error. Please check if the API endpoint is correct and the server is running properly."
