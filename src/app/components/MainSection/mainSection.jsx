@@ -6,8 +6,9 @@ import UserMessage from "@/app/components/UserMessage/userMessage";
 import AssistantResponse from "@/app/components/AssistantResponse/assistantResponse";
 import { useRouter } from "next/navigation";
 
-const CHAT_HISTORY_API = "http://localhost:8002/api/messages/";
-const CHAT_API = "http://localhost:8000/chat";
+// Use environment variables for API endpoints
+const CHAT_HISTORY_API = `${process.env.NEXT_PUBLIC_API_URL}/api/messages/`;
+const CHAT_API = `${process.env.NEXT_PUBLIC_CHAT_API_URL}/chat`;
 
 function MainSection() {
   const router = useRouter();
@@ -56,12 +57,20 @@ function MainSection() {
           return;
         }
 
+        if (!process.env.NEXT_PUBLIC_API_URL) {
+          console.error("API URL is not configured");
+          throw new Error("API URL is not configured");
+        }
+
+        console.log("Fetching chat history from:", CHAT_HISTORY_API); // Debug log
+
         const res = await fetch(CHAT_HISTORY_API, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Token ${token}`,
           },
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -71,7 +80,9 @@ function MainSection() {
             router.push("/login");
             return;
           }
-          throw new Error(res.statusText);
+          throw new Error(
+            `Failed to fetch chat history: ${res.status} ${res.statusText}`
+          );
         }
 
         const data = await res.json();
@@ -108,6 +119,22 @@ function MainSection() {
       return;
     }
 
+    if (
+      !process.env.NEXT_PUBLIC_API_URL ||
+      !process.env.NEXT_PUBLIC_CHAT_API_URL
+    ) {
+      console.error("API URLs are not configured");
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "assistant",
+          content: "❌ API configuration error. Please contact support.",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+      return;
+    }
+
     try {
       // Add user message to chat UI
       setMessages((prev) => [
@@ -121,6 +148,8 @@ function MainSection() {
       setInputMessage("");
       setIsLoading(true);
 
+      console.log("Saving user message to:", CHAT_HISTORY_API); // Debug log
+
       // 1. Save user message to Django
       const saveUserMessage = await fetch(CHAT_HISTORY_API, {
         method: "POST",
@@ -132,6 +161,7 @@ function MainSection() {
           message: inputMessage,
           sender: "user",
         }),
+        credentials: "include",
       });
 
       if (!saveUserMessage.ok) {
@@ -140,8 +170,12 @@ function MainSection() {
           router.push("/login");
           return;
         }
-        throw new Error("Failed to save message");
+        throw new Error(
+          `Failed to save message: ${saveUserMessage.status} ${saveUserMessage.statusText}`
+        );
       }
+
+      console.log("Getting LLM response from:", CHAT_API); // Debug log
 
       // 2. Get LLM response from FastAPI
       const res = await fetch(CHAT_API, {
@@ -153,9 +187,14 @@ function MainSection() {
         body: JSON.stringify({
           messages: [{ role: "user", content: inputMessage }],
         }),
+        credentials: "include",
       });
 
-      if (!res.ok) throw new Error(res.statusText);
+      if (!res.ok) {
+        throw new Error(
+          `Failed to get LLM response: ${res.status} ${res.statusText}`
+        );
+      }
 
       const data = await res.json();
 
@@ -170,6 +209,8 @@ function MainSection() {
         },
       ]);
 
+      console.log("Saving assistant response to:", CHAT_HISTORY_API); // Debug log
+
       // 3. Save assistant response to Django
       const saveAssistantMessage = await fetch(CHAT_HISTORY_API, {
         method: "POST",
@@ -181,6 +222,7 @@ function MainSection() {
           message: data.response,
           sender: "model",
         }),
+        credentials: "include",
       });
 
       if (!saveAssistantMessage.ok) {
@@ -189,7 +231,9 @@ function MainSection() {
           router.push("/login");
           return;
         }
-        throw new Error("Failed to save response");
+        throw new Error(
+          `Failed to save response: ${saveAssistantMessage.status} ${saveAssistantMessage.statusText}`
+        );
       }
 
       // Typing animation for assistant response
@@ -210,7 +254,7 @@ function MainSection() {
         ...prev,
         {
           type: "assistant",
-          content: "❌ Failed to get response. Please try again.",
+          content: `❌ Error: ${error.message}. Please try again.`,
           timestamp: new Date().toISOString(),
         },
       ]);
