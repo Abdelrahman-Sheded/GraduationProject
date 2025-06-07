@@ -23,7 +23,11 @@ function Login() {
     setError("");
     setIsLoading(true);
 
-    if (!process.env.NEXT_PUBLIC_API_URL) {
+    // Get the API URL based on environment
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    console.log("API URL from environment:", apiUrl); // Debug log
+
+    if (!apiUrl) {
       setError(
         "API URL is not configured. Please check your environment variables."
       );
@@ -31,31 +35,23 @@ function Login() {
       return;
     }
 
+    // Ensure the API URL is not the frontend URL
+    if (apiUrl.includes("graduation-project-iokg.vercel.app")) {
+      setError(
+        "Invalid API URL. The API URL should point to your Django backend, not the frontend."
+      );
+      setIsLoading(false);
+      return;
+    }
+
     try {
       // Remove trailing slash if present and add the endpoint
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
-      const apiUrl = `${baseUrl}/api-token-auth/`;
+      const baseUrl = apiUrl.replace(/\/$/, "");
+      const endpoint = `${baseUrl}/api-token-auth/`;
 
-      console.log("Attempting login to:", apiUrl); // Debug log
+      console.log("Attempting login to:", endpoint); // Debug log
 
-      // First, try a HEAD request to check if the endpoint exists
-      try {
-        const headRes = await fetch(apiUrl, {
-          method: "HEAD",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-        console.log("HEAD request status:", headRes.status);
-        console.log(
-          "HEAD request headers:",
-          Object.fromEntries(headRes.headers.entries())
-        );
-      } catch (e) {
-        console.warn("HEAD request failed:", e);
-      }
-
-      const res = await fetch(apiUrl, {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,58 +96,6 @@ function Login() {
           );
         } else {
           throw new Error("Server returned invalid response format");
-        }
-      }
-
-      if (res.status === 308) {
-        // Handle redirect
-        const redirectUrl = res.headers.get("Location");
-        console.log("Redirect URL:", redirectUrl); // Debug log
-
-        if (redirectUrl) {
-          const redirectRes = await fetch(redirectUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              "X-Requested-With": "XMLHttpRequest",
-            },
-            body: JSON.stringify({ username, password }),
-            credentials: "include",
-          });
-
-          console.log("Redirect response status:", redirectRes.status); // Debug log
-          console.log(
-            "Redirect response headers:",
-            Object.fromEntries(redirectRes.headers.entries())
-          ); // Debug log
-
-          if (!redirectRes.ok) {
-            let errorMessage = "Invalid username or password";
-            try {
-              const errorData = await redirectRes.json();
-              errorMessage = errorData.detail || errorMessage;
-            } catch (e) {
-              console.error("Error parsing redirect response:", e);
-              // Try to read the response as text
-              const responseText = await redirectRes.text();
-              console.error("Redirect response body:", responseText);
-            }
-            throw new Error(errorMessage);
-          }
-
-          let data;
-          try {
-            data = await redirectRes.json();
-          } catch (e) {
-            console.error("Error parsing redirect response JSON:", e);
-            const responseText = await redirectRes.text();
-            console.error("Redirect response body:", responseText);
-            throw new Error("Invalid response from server");
-          }
-
-          handleSuccessfulLogin(data);
-          return;
         }
       }
 
