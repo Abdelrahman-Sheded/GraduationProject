@@ -1,6 +1,27 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* Palette */
+  --bg-main: #17181c;
+  --bg-card: #1e1f25;
+  --border-color: #2a2c33;
+
+  --primary-color: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #1e40af;
+
+  --success-color: #10b981;
+  --success-dark: #059669;
+  --success-light: #052e16;
+
+  --error-color: #ef4444;
+  --error-dark: #dc2626;
+  --error-light: #451a1a;
+
+  --text-dark: #f3f4f6;
+  --text-medium: #d1d5db;
+  --text-light: #9ca3af;
 }
 
 @media (prefers-color-scheme: dark) {

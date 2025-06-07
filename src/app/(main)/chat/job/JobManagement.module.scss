@@ -3,31 +3,27 @@
 // -----------------------------------------------------------------------------
 // Dark Theme Variables
 // -----------------------------------------------------------------------------
-:root {
-  /* Typography */
-  --font-sans: "Inter", system-ui, sans-serif;
+$font-sans: "Inter", system-ui, sans-serif;
 
-  /* Palette */
-  --bg-main: #17181c;
-  --bg-card: #1e1f25;
-  --border-color: #2a2c33;
+$bg-main: #17181c;
+$bg-card: #1e1f25;
+$border-color: #2a2c33;
 
-  --primary-color: #3b82f6;
-  --primary-dark: #2563eb;
-  --primary-light: #1e40af;
+$primary-color: #3b82f6;
+$primary-dark: #2563eb;
+$primary-light: #1e40af;
 
-  --success-color: #10b981;
-  --success-dark: #059669;
-  --success-light: #052e16;
+$success-color: #10b981;
+$success-dark: #059669;
+$success-light: #052e16;
 
-  --error-color: #ef4444;
-  --error-dark: #dc2626;
-  --error-light: #451a1a;
+$error-color: #ef4444;
+$error-dark: #dc2626;
+$error-light: #451a1a;
 
-  --text-dark: #f3f4f6;
-  --text-medium: #d1d5db;
-  --text-light: #9ca3af;
-}
+$text-dark: #f3f4f6;
+$text-medium: #d1d5db;
+$text-light: #9ca3af;
 
 // -----------------------------------------------------------------------------
 // Mixins
@@ -93,37 +89,28 @@
 }
 
 // -----------------------------------------------------------------------------
-// Global Background (inside CSS Modules)
-// -----------------------------------------------------------------------------
-:global(body) {
-  background: var(--bg-main);
-  color: var(--text-dark);
-  font-family: var(--font-sans);
-}
-
-// -----------------------------------------------------------------------------
 // Layout
 // -----------------------------------------------------------------------------
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 24px;
-  color: var(--text-dark);
+  color: $text-dark;
 }
 
 .header {
   @include flex-space-between;
   margin-bottom: 32px;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid $border-color;
 
   h1 {
-    font-family: var(--font-sans);
+    font-family: $font-sans;
     font-weight: 600;
     font-size: 28px;
     line-height: 1.2;
     margin: 0;
-    background: var(--accent-grad);
+    background: linear-gradient(135deg, $primary-color 0%, #6366f1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -136,15 +123,15 @@
   @include flex-center;
   gap: 8px;
   padding: 12px 24px;
-  background: var(--primary-color);
-  color: var(--text-dark);
+  background: $primary-color;
+  color: $text-dark;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background: var(--primary-dark);
+    background: $primary-dark;
     transform: translateY(-2px);
   }
 
@@ -156,16 +143,16 @@
 .actionButton {
   width: 100%;
   padding: 12px;
-  background: var(--primary-color);
+  background: $primary-color;
   border: none;
-  color: var(--text-dark);
+  color: $text-dark;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
   transition: background 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background: var(--primary-dark);
+    background: $primary-dark;
     transform: translateY(-2px);
   }
 }
@@ -180,7 +167,7 @@
 }
 
 .jobCard {
-  background: var(--bg-card);
+  background: $bg-card;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -193,7 +180,7 @@
   }
 
   &.active {
-    border-left: 4px solid var(--success-color);
+    border-left: 4px solid $success-color;
   }
 }
 
@@ -204,18 +191,18 @@
   max-width: 100%;
 
   .statusIcon {
-    color: var(--success-color);
+    color: $success-color;
     flex-shrink: 0;
     width: 20px;
     height: 20px;
   }
 
   h3 {
-    font-family: var(--font-sans);
+    font-family: $font-sans;
     font-weight: 500;
     font-size: 18px;
     margin: 0;
-    color: var(--text-dark);
+    color: $text-dark;
     flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -227,8 +214,8 @@
 .activeBadge {
   margin-left: auto;
   padding: 4px 12px;
-  background: var(--success-light);
-  color: var(--success-color);
+  background: $success-light;
+  color: $success-color;
   border-radius: 9999px;
   font-size: 13px;
 }
@@ -243,7 +230,7 @@
 .metaItem {
   @include flex-center-vert;
   gap: 8px;
-  color: var(--text-medium);
+  color: $text-medium;
   font-size: 14px;
 
   svg {
@@ -256,18 +243,18 @@
 // -----------------------------------------------------------------------------
 .uploadCard {
   margin: 32px 0;
-  border: 2px dashed var(--border-color);
+  border: 2px dashed $border-color;
   border-radius: 12px;
   padding: 40px 16px;
   text-align: center;
-  background: var(--bg-card);
+  background: $bg-card;
   animation: fadeIn 240ms ease-out both;
 }
 
 .dropzone {
   @include flex-col;
   gap: 16px;
-  color: var(--text-medium);
+  color: $text-medium;
   cursor: pointer;
 
   p {
@@ -275,10 +262,10 @@
     font-weight: 500;
   }
   small {
-    color: var(--text-light);
+    color: $text-light;
   }
   .uploadIcon {
-    color: var(--primary-color);
+    color: $primary-color;
   }
   .fileInput {
     display: none;
@@ -293,14 +280,14 @@
   gap: 16px;
   align-items: center;
   padding: 64px 0;
-  color: var(--text-medium);
+  color: $text-medium;
 }
 
 .loader {
   width: 40px;
   height: 40px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--primary-color);
+  border: 3px solid $border-color;
+  border-top-color: $primary-color;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -318,12 +305,12 @@
   animation: fadeIn 240ms ease-out both;
 
   &.success {
-    background: var(--success-light);
-    color: var(--success-color);
+    background: $success-light;
+    color: $success-color;
   }
   &.error {
-    background: var(--error-light);
-    color: var(--error-color);
+    background: $error-light;
+    color: $error-color;
   }
 }
 

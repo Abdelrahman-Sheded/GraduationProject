@@ -4,22 +4,20 @@
 /* ------------------------------------------------------------------------- */
 /*  GLOBAL (shared) THEME VARIABLES                                          */
 /* ------------------------------------------------------------------------- */
-:root {
-  --bg-main: #17181c;
-  --bg-card: #1e1f25;
-  --border-color: #2a2c33;
+$bg-main: #17181c;
+$bg-card: #1e1f25;
+$border-color: #2a2c33;
 
-  --text-dark: #f3f4f6;
-  --text-medium: #d1d5db;
-  --text-light: #9ca3af;
+$text-dark: #f3f4f6;
+$text-medium: #d1d5db;
+$text-light: #9ca3af;
 
-  --primary-color: #3b82f6;
-  --primary-dark: #2563eb;
-  --primary-light: #60a5fa;
+$primary-color: #3b82f6;
+$primary-dark: #2563eb;
+$primary-light: #60a5fa;
 
-  --error-color: #dc3545;
-  --error-dark: #bb2d3b;
-}
+$error-color: #dc3545;
+$error-dark: #bb2d3b;
 
 /* ------------------------------------------------------------------------- */
 /*  ANIMATIONS                                                               */
@@ -54,8 +52,8 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  color: var(--text-dark);
-  background: var(--bg-main);
+  color: $text-dark;
+  background: $bg-main;
   min-height: 100vh;
 
   @media (max-width: 1200px) {
@@ -69,16 +67,16 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid $border-color;
 
   h1 {
     margin: 0;
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: #ececf1;
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    color: $text-dark;
+    background: linear-gradient(135deg, $primary-color 0%, #6366f1 100%);
     background-clip: text;
-    -webkit-text-fill-color: #0000;
+    -webkit-text-fill-color: transparent;
   }
 
   @media (max-width: 1200px) {
@@ -101,11 +99,11 @@
 
   span {
     font-size: 14px;
-    color: var(--text-medium);
+    color: $text-medium;
   }
   .cvCount {
     font-size: 14px;
-    color: var(--text-light);
+    color: $text-light;
   }
   .lastUpdated {
     margin-left: 8px;
@@ -120,14 +118,14 @@
 .select {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #2d2f34;
-  background: #343541;
-  color: #ececf1;
+  border: 1px solid $border-color;
+  background: $bg-card;
+  color: $text-dark;
   cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: $primary-color;
   }
 }
 
@@ -142,7 +140,7 @@
   h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #ececf1;
+    color: $text-dark;
   }
 
   @media (max-width: 1200px) {
@@ -155,7 +153,6 @@
 }
 
 .tableWrapper {
-  /* new helper to enable horizontal scroll */
   overflow-x: auto;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
@@ -164,23 +161,23 @@
 .rankingsTable {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px; // Ensure table doesn't get too compressed
+  min-width: 600px;
 
   th,
   td {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid #2d2f34;
+    border-bottom: 1px solid $border-color;
   }
 
   th {
-    background: #2d2f34;
-    color: #ececf1;
+    background: $bg-card;
+    color: $text-dark;
     font-weight: 600;
   }
 
   td {
-    color: #a0a0a0;
+    color: $text-medium;
   }
 
   tr:hover {
@@ -199,12 +196,12 @@
 /*  REMOVE SECTION                                                           */
 /* ------------------------------------------------------------------------- */
 .removeSection {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid $border-color;
   padding-top: 32px;
   h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #ececf1;
+    color: $text-dark;
   }
 
   @media (max-width: 1200px) {
@@ -235,13 +232,13 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   border: none;
-  background: #ef4444;
+  background: $error-color;
   color: white;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: #dc2626;
+    background: $error-dark;
   }
 
   &:disabled {
@@ -257,9 +254,9 @@
 .error {
   padding: 2rem;
   text-align: center;
-  color: #ececf1;
+  color: $text-dark;
   font-size: 1.25rem;
 }
 .error {
-  color: #ef4444;
+  color: $error-color;
 }
