@@ -43,13 +43,20 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest", // Add this for Django
+          "X-Requested-With": "XMLHttpRequest",
         },
         body: JSON.stringify({ username, password }),
         credentials: "include",
       });
 
       console.log("Response status:", res.status); // Debug log
+
+      // Check if the response is JSON
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error("Response is not JSON:", contentType);
+        throw new Error("Server returned invalid response format");
+      }
 
       if (res.status === 308) {
         // Handle redirect
@@ -62,7 +69,7 @@ function Login() {
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
-              "X-Requested-With": "XMLHttpRequest", // Add this for Django
+              "X-Requested-With": "XMLHttpRequest",
             },
             body: JSON.stringify({ username, password }),
             credentials: "include",
@@ -71,22 +78,48 @@ function Login() {
           console.log("Redirect response status:", redirectRes.status); // Debug log
 
           if (!redirectRes.ok) {
-            const errorData = await redirectRes.json();
-            throw new Error(errorData.detail || "Invalid username or password");
+            let errorMessage = "Invalid username or password";
+            try {
+              const errorData = await redirectRes.json();
+              errorMessage = errorData.detail || errorMessage;
+            } catch (e) {
+              console.error("Error parsing redirect response:", e);
+            }
+            throw new Error(errorMessage);
           }
 
-          const data = await redirectRes.json();
+          let data;
+          try {
+            data = await redirectRes.json();
+          } catch (e) {
+            console.error("Error parsing redirect response JSON:", e);
+            throw new Error("Invalid response from server");
+          }
+
           handleSuccessfulLogin(data);
           return;
         }
       }
 
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.detail || "Invalid username or password");
+        let errorMessage = "Invalid username or password";
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (e) {
+          console.error("Error parsing error response:", e);
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        console.error("Error parsing response JSON:", e);
+        throw new Error("Invalid response from server");
+      }
+
       handleSuccessfulLogin(data);
     } catch (err) {
       console.error("Login error:", err);
