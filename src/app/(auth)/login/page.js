@@ -23,30 +23,101 @@ function Login() {
     setError("");
     setIsLoading(true);
 
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      setError(
+        "API URL is not configured. Please check your environment variables."
+      );
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:8002/api-token-auth/", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL.endsWith("/")
+        ? process.env.NEXT_PUBLIC_API_URL + "api-token-auth/"
+        : process.env.NEXT_PUBLIC_API_URL + "/api-token-auth/";
+
+      const res = await fetch(apiUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          // Add Origin header
+          Origin: window.location.origin,
+        },
         body: JSON.stringify({ username, password }),
+        // Change credentials to 'include' for CORS
+        credentials: "include",
+        // Add mode: 'cors' explicitly
+        mode: "cors",
       });
 
       if (!res.ok) {
-        console.log(res);
+        if (res.status === 308) {
+          // Handle redirect
+          const redirectUrl = res.headers.get("Location");
+          if (redirectUrl) {
+            const redirectRes = await fetch(redirectUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Origin: window.location.origin,
+              },
+              body: JSON.stringify({ username, password }),
+              credentials: "include",
+              mode: "cors",
+            });
 
-        throw new Error("Invalid username or password");
+            if (!redirectRes.ok) {
+              const errorData = await redirectRes.json();
+              throw new Error(
+                errorData.detail || "Invalid username or password"
+              );
+            }
+
+            const data = await redirectRes.json();
+            handleSuccessfulLogin(data);
+            return;
+          }
+        }
+
+        const errorData = await res.json();
+        throw new Error(errorData.detail || "Invalid username or password");
       }
 
       const data = await res.json();
-      // Store the token in localStorage
-      localStorage.setItem("authToken", data.token);
-
-      // Redirect to chat page
-      router.push("/chat");
+      handleSuccessfulLogin(data);
     } catch (err) {
-      setError(err.message || "Login failed. Please try again.");
+      console.error("Login error:", err);
+      if (
+        err.message.includes("CORS") ||
+        err.message.includes("NetworkError")
+      ) {
+        setError("Connection error. Please check your network and try again.");
+      } else {
+        setError(
+          err.message ||
+            "Login failed. Please check your credentials and try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSuccessfulLogin = (data) => {
+    if (!data.token) {
+      throw new Error("No authentication token received");
+    }
+
+    localStorage.setItem("authToken", data.token);
+
+    // Optional: Store additional user data if needed
+    if (data.user) {
+      localStorage.setItem("userData", JSON.stringify(data.user));
+    }
+
+    router.push("/chat");
   };
 
   return (
@@ -68,6 +139,8 @@ function Login() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                disabled={isLoading}
+                placeholder="Enter your username"
               />
             </div>
           </div>
@@ -84,6 +157,8 @@ function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isLoading}
+                placeholder="Enter your password"
               />
             </div>
           </div>
