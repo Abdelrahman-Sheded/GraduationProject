@@ -50,12 +50,27 @@ function Login() {
       });
 
       console.log("Response status:", res.status); // Debug log
+      console.log(
+        "Response headers:",
+        Object.fromEntries(res.headers.entries())
+      ); // Debug log
 
       // Check if the response is JSON
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         console.error("Response is not JSON:", contentType);
-        throw new Error("Server returned invalid response format");
+
+        // Try to read the response as text to see what we're getting
+        const responseText = await res.text();
+        console.error("Response body:", responseText);
+
+        if (contentType?.includes("text/html")) {
+          throw new Error(
+            "Server returned HTML instead of JSON. This might indicate a server error or incorrect endpoint."
+          );
+        } else {
+          throw new Error("Server returned invalid response format");
+        }
       }
 
       if (res.status === 308) {
@@ -76,6 +91,10 @@ function Login() {
           });
 
           console.log("Redirect response status:", redirectRes.status); // Debug log
+          console.log(
+            "Redirect response headers:",
+            Object.fromEntries(redirectRes.headers.entries())
+          ); // Debug log
 
           if (!redirectRes.ok) {
             let errorMessage = "Invalid username or password";
@@ -84,6 +103,9 @@ function Login() {
               errorMessage = errorData.detail || errorMessage;
             } catch (e) {
               console.error("Error parsing redirect response:", e);
+              // Try to read the response as text
+              const responseText = await redirectRes.text();
+              console.error("Redirect response body:", responseText);
             }
             throw new Error(errorMessage);
           }
@@ -93,6 +115,8 @@ function Login() {
             data = await redirectRes.json();
           } catch (e) {
             console.error("Error parsing redirect response JSON:", e);
+            const responseText = await redirectRes.text();
+            console.error("Redirect response body:", responseText);
             throw new Error("Invalid response from server");
           }
 
@@ -108,6 +132,9 @@ function Login() {
           errorMessage = errorData.detail || errorMessage;
         } catch (e) {
           console.error("Error parsing error response:", e);
+          // Try to read the response as text
+          const responseText = await res.text();
+          console.error("Error response body:", responseText);
         }
         throw new Error(errorMessage);
       }
@@ -117,6 +144,8 @@ function Login() {
         data = await res.json();
       } catch (e) {
         console.error("Error parsing response JSON:", e);
+        const responseText = await res.text();
+        console.error("Response body:", responseText);
         throw new Error("Invalid response from server");
       }
 
@@ -128,6 +157,10 @@ function Login() {
         err.message.includes("NetworkError")
       ) {
         setError("Connection error. Please check your network and try again.");
+      } else if (err.message.includes("HTML instead of JSON")) {
+        setError(
+          "Server error. Please check if the API endpoint is correct and the server is running properly."
+        );
       } else {
         setError(
           err.message ||
