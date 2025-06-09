@@ -171,7 +171,7 @@ $error-dark: #bb2d3b;
   }
 
   th {
-    background: $bg-card;
+    background: #2d2f34; // Darker header
     color: $text-dark;
     font-weight: 600;
   }
@@ -180,8 +180,16 @@ $error-dark: #bb2d3b;
     color: $text-medium;
   }
 
-  tr:hover {
-    background: rgba(255, 255, 255, 0.05);
+  tr {
+    background: #1e1f25; // Base row color
+
+    &:nth-child(even) {
+      background: #2a2c33; // More contrasting even row color
+    }
+
+    &:hover {
+      background: #343541; // More noticeable hover state
+    }
   }
 
   @media (max-width: 1200px) {
