@@ -6,8 +6,10 @@ import UserMessage from "@/app/components/UserMessage/userMessage";
 import AssistantResponse from "@/app/components/AssistantResponse/assistantResponse";
 import { useRouter } from "next/navigation";
 
-const CHAT_HISTORY_API = "http://localhost:8002/api/messages/";
-const CHAT_API = "http://localhost:8000/chat";
+// Use environment variables for API URLs
+const CHAT_HISTORY_API =
+  process.env.NEXT_PUBLIC_DJANGO_API_URL + "/api/messages/";
+const CHAT_API = process.env.NEXT_PUBLIC_RAG_API_URL + "/chat";
 
 function MainSection() {
   const router = useRouter();

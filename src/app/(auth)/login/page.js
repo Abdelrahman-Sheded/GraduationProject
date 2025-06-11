@@ -23,7 +23,7 @@ function Login() {
     setError("");
     setIsLoading(true);
 
-    if (!process.env.NEXT_PUBLIC_API_URL) {
+    if (!process.env.NEXT_PUBLIC_DJANGO_API_URL) {
       setError(
         "API URL is not configured. Please check your environment variables."
       );
@@ -32,22 +32,19 @@ function Login() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL.endsWith("/")
-        ? process.env.NEXT_PUBLIC_API_URL + "api-token-auth/"
-        : process.env.NEXT_PUBLIC_API_URL + "/api-token-auth/";
+      const apiUrl = process.env.NEXT_PUBLIC_DJANGO_API_URL.endsWith("/")
+        ? process.env.NEXT_PUBLIC_DJANGO_API_URL + "api-token-auth/"
+        : process.env.NEXT_PUBLIC_DJANGO_API_URL + "/api-token-auth/";
 
       const res = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          // Add Origin header
           Origin: window.location.origin,
         },
         body: JSON.stringify({ username, password }),
-        // Change credentials to 'include' for CORS
         credentials: "include",
-        // Add mode: 'cors' explicitly
         mode: "cors",
       });
 

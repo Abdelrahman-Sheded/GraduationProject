@@ -82,8 +82,6 @@ export default function JobPageClient({ job }) {
     <div className={styles.jobPage}>
       <div className={styles.jobHeader}>
         <h1 className={styles.jobTitle}>{formattedJobTitle}</h1>
-        
-        
       </div>
 
       <div className={styles.jobLayout}>
@@ -98,8 +96,6 @@ export default function JobPageClient({ job }) {
           ) : (
             <p>No job description available.</p>
           )}
-
-          
         </div>
 
         <div className={styles.applicationForm}>
