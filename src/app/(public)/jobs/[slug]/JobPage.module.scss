@@ -1,0 +1,202 @@
+// JobPage.module.scss
+$bg-color: #17181c;
+$card-bg: #23252b;
+$text-primary: #f0f0f0;
+$text-secondary: #b0b0b0;
+$accent-color: #4f46e5;
+$accent-hover: #6366f1;
+$border-color: #2d2f36;
+$success-color: #10b981;
+$error-color: #ef4444;
+
+.jobPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: $text-primary;
+  background-color: $bg-color;
+  min-height: 100vh;
+  // Local scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: $accent-color $card-bg;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $card-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $accent-color;
+    border-radius: 4px;
+  }
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
+}
+
+.jobHeader {
+  margin-bottom: 3rem;
+  text-align: center;
+
+  .jobTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+}
+
+.jobLayout {
+  display: grid;
+  gap: 2.5rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+.jobDescription {
+  background: $card-bg;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: $accent-color;
+      border-radius: 3px;
+    }
+  }
+
+  div {
+    line-height: 1.7;
+    color: $text-secondary;
+
+    br {
+      margin-bottom: 1rem;
+      display: block;
+      content: "";
+    }
+  }
+}
+
+.applicationForm {
+  background: $card-bg;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .formTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: $text-primary;
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: $text-primary;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $accent-color;
+    }
+
+    &::placeholder {
+      color: rgba($text-secondary, 0.5);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  small {
+    display: block;
+    margin-top: 0.5rem;
+    color: $text-secondary;
+    font-size: 0.875rem;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: $accent-color;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: $accent-hover;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+
+  &.success {
+    background: rgba($success-color, 0.1);
+    border: 1px solid $success-color;
+    color: $success-color;
+  }
+
+  &.error {
+    background: rgba($error-color, 0.1);
+    border: 1px solid $error-color;
+    color: $error-color;
+  }
+}

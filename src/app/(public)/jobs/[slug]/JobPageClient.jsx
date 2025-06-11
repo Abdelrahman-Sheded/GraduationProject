@@ -17,9 +17,8 @@ export default function JobPageClient({ job }) {
   const [error, setError] = useState(null);
 
   // Format job title for display
-  const formattedJobTitle = job.filename
-    .replace(/_/g, " ")
-    .replace(/\.pdf$/i, "");
+  const formattedJobTitle =
+    job.title || job.filename.replace(/_/g, " ").replace(/\.pdf$/i, "");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,32 +165,24 @@ export default function JobPageClient({ job }) {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="cv">Upload CV/Resume (PDF only) *</label>
+                <label htmlFor="cv">CV/Resume *</label>
                 <input
                   type="file"
                   id="cv"
                   name="cv"
                   required
-                  accept=".pdf,.doc,.docx"
                   onChange={handleFileChange}
-                  className={styles.fileInput}
+                  accept=".pdf,.doc,.docx"
                 />
-                <small>Max file size: 5MB</small>
+                <small>Accepted formats: PDF, DOC, DOCX</small>
               </div>
 
               <button
                 type="submit"
-                disabled={isSubmitting}
                 className={styles.submitButton}
+                disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <>
-                    <span className={styles.spinner}></span>
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Application"
-                )}
+                {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
             </form>
           )}

@@ -141,6 +141,9 @@ $text-light: #9ca3af;
 }
 
 .actionButton {
+  margin-top: auto;
+  margin-bottom: 12px;
+  align-self: flex-end;
   width: 100%;
   padding: 12px;
   background: $primary-color;
@@ -167,12 +170,17 @@ $text-light: #9ca3af;
 }
 
 .jobCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
   background: $bg-card;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
   animation: fadeIn 240ms ease-out both;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-4px);
@@ -201,23 +209,22 @@ $text-light: #9ca3af;
     font-family: $font-sans;
     font-weight: 500;
     font-size: 18px;
-    margin: 0;
     color: $text-dark;
-    flex: 1 1 auto;
-    overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    word-break: break-all;
+    box-sizing: border-box;
   }
 }
 
 .activeBadge {
-  margin-left: auto;
-  padding: 4px 12px;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
   background: $success-light;
   color: $success-color;
+  padding: 6px 16px;
   border-radius: 9999px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 // Card body
@@ -323,4 +330,20 @@ $text-light: #9ca3af;
   font-size: 20px;
   line-height: 1;
   padding: 0;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: $text-medium;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1;
+
+  &:hover {
+    color: $error-color;
+  }
 }

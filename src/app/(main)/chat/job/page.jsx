@@ -1,9 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import { CheckCircle, Clock, UploadCloud } from "react-feather"; // Install react-feather
+import { CheckCircle, Clock, UploadCloud, X } from "react-feather"; // Install react-feather
 import styles from "./JobManagement.module.scss";
 import Link from "next/link";
 import { formatJobSlug } from "@/app/utils/formatJobSlug";
+
+// Function to remove numbers and clean up title
+const cleanTitle = (title) => {
+  return title
+    .replace(/[0-9]/g, "") // Remove numbers
+    .replace(/^test[-_\s]*/i, "") // Remove test prefix
+    .replace(/[-_\s]+/g, " ") // Replace multiple spaces/dashes/underscores with single space
+    .trim(); // Remove leading/trailing spaces
+};
 
 export default function JobManagementPage() {
   const [jobFiles, setJobFiles] = useState([]);
@@ -48,7 +57,34 @@ export default function JobManagementPage() {
 
   const handleUpload = async (file) => {
     const formData = new FormData();
-    const title = file.name.replace(/\.pdf$/, ""); // Example title from file name
+    const title = file.name.replace(/\.pdf$/, "").replace(/^test[-_\s]*/i, "");
+    const newSlug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    console.log("Current job files:", jobFiles);
+    console.log("New file:", { title, newSlug });
+
+    // Check for duplicates using slugs - check if new slug is a prefix of any existing slug
+    const isDuplicate = jobFiles.some((job) => {
+      const existingSlug = job.slug;
+      console.log("Comparing:", {
+        existingSlug,
+        newSlug,
+        isMatch: existingSlug.startsWith(newSlug + "-"),
+        jobTitle: job.title,
+        jobFilename: job.filename,
+      });
+      return existingSlug.startsWith(newSlug + "-");
+    });
+
+    console.log("Is duplicate?", isDuplicate);
+
+    if (isDuplicate) {
+      setMessage("❌ A job with this title already exists.");
+      return;
+    }
 
     formData.append("title", title);
     formData.append("file", file);
@@ -66,11 +102,31 @@ export default function JobManagementPage() {
 
       const data = await res.json();
       setMessage(data.message || "✅ File uploaded");
-      fetchJobList(); // refresh
-      setIsUploading(false); // hide upload card
+      fetchJobList();
+      setIsUploading(false);
     } catch (err) {
       console.error("Upload error:", err);
       setMessage("❌ Failed to upload file.");
+    }
+  };
+
+  const handleDelete = async (filename) => {
+    try {
+      const encodedFilename = encodeURIComponent(filename);
+      const res = await fetch(
+        `http://localhost:8000/job-requirements/${encodedFilename}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete");
+
+      const data = await res.json();
+      setMessage(data.message);
+      fetchJobList(); // Refresh the list
+    } catch (err) {
+      setMessage("❌ Failed to delete job file.");
     }
   };
 
@@ -146,49 +202,48 @@ export default function JobManagementPage() {
         </div>
       ) : (
         <div className={styles.jobGrid}>
-          {jobFiles.map((job, idx) => {
-            const jobSlug = formatJobSlug(job.filename);
-
-            return (
-              <div
-                key={idx}
-                className={`${styles.jobCard} ${
-                  job.is_current ? styles.active : ""
-                }`}
+          {jobFiles.map((job, idx) => (
+            <div
+              key={idx}
+              className={`${styles.jobCard} ${
+                job.is_current ? styles.active : ""
+              }`}
+            >
+              <button
+                className={styles.deleteButton}
+                onClick={() => handleDelete(job.filename)}
+                title="Delete job"
               >
-                <Link
-                  href={`/chat/job/${jobSlug}`}
-                  passHref
-                  className={styles.jobLink}
-                >
-                  {/* Card content remains the same */}
-                  <div className={styles.cardHeader}>
-                    <CheckCircle size={20} className={styles.statusIcon} />
-                    <h3>{job.filename.replace(/_/g, " ")}</h3>{" "}
-                    {/* Display with spaces instead of underscores */}
-                    {job.is_current && (
-                      <span className={styles.activeBadge}>Active</span>
-                    )}
-                  </div>
-                  <div className={styles.cardBody}>
-                    <div className={styles.metaItem}>
-                      <Clock size={16} />
-                      <span>Created: {job.created}</span>
-                    </div>
-                  </div>
+                <X size={14} />
+              </button>
+              <div className={styles.cardHeader}>
+                <CheckCircle size={20} className={styles.statusIcon} />
+                <Link href={`/jobs/${job.slug}`} className={styles.jobLink}>
+                  <h3 className={styles.jobTitle}>
+                    {cleanTitle(job.title || job.filename.replace(/_/g, " "))}
+                  </h3>
                 </Link>
-
-                {!job.is_current && (
-                  <button
-                    className={styles.actionButton}
-                    onClick={() => setAsActive(job.path)}
-                  >
-                    Set as Active
-                  </button>
+                {job.is_current && (
+                  <span className={styles.activeBadge}>Active</span>
                 )}
               </div>
-            );
-          })}
+              <div className={styles.cardBody}>
+                <div className={styles.metaItem}>
+                  <Clock size={16} />
+                  <span>Created: {job.created}</span>
+                </div>
+              </div>
+
+              {!job.is_current && (
+                <button
+                  className={styles.actionButton}
+                  onClick={() => setAsActive(job.path)}
+                >
+                  Set as Active
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>

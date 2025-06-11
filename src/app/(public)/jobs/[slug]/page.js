@@ -27,6 +27,7 @@ async function getJobData(slug) {
       console.error(
         "No matching job for slug:",
         slug,
+        "Available slugs:",
         listJson.job_files.map((j) => j.slug)
       );
       return null;
@@ -57,7 +58,7 @@ async function getJobData(slug) {
   }
 }
 
-export default async function JobPage({ params: { slug } }) {
+export default async function PublicJobPage({ params: { slug } }) {
   const job = await getJobData(slug);
   if (!job) {
     // Trigger Next.js 404
